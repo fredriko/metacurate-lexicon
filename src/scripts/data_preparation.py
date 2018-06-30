@@ -1,11 +1,14 @@
 import json
 import zipfile
 import glob
-from typing import List
+from typing import List, Tuple
 
 import logging
 import re
+
+import gensim
 import pymongo as pymongo
+from gensim.models.phrases import Phraser
 from pymongo.collection import Collection
 from segtok.segmenter import split_multi
 from segtok.tokenizer import web_tokenizer
@@ -97,21 +100,35 @@ class DbProcessor(object):
                     out.write(" ".join(sentence) + "\n")
 
 
+def create_phrases(input_directory: str, bigram_model_file: str, trigram_model_file: str) -> None:
+    sentences = gensim.models.word2vec.PathLineSentences(input_directory)
+    bigrams = gensim.models.phrases.Phrases(sentences, min_count=10)
+    bigrams_phraser = gensim.models.phrases.Phraser(bigrams)
+    bigrams_phraser.save(bigram_model_file)
+    trigrams = gensim.models.phrases.Phrases(bigrams[sentences], min_count=10)
+    trigrams_phraser = gensim.models.phrases.Phraser(trigrams)
+    trigrams_phraser.save(trigram_model_file)
 
-"""
-def create_phrases():
-    db_host = "mongodb://localhost:27017"
-    db_name = "texts"
-    db_collection_name = "diffbot"
-    common_terms = ["of", "with", "without", "and", "or", "the", "a", "an"]
-    sentences = read_db(db_host, db_name, db_collection_name)
-    bigrams = gensim.models.phrases.Phrases(sentences, common_terms=common_terms)
-    bigrams.save("bigrams_model")
-    trigrams = gensim.models.phrases.Phrases(bigrams[sentences], common_terms=common_terms)
-    trigrams.save("trigrams_model")
-    quadgrams = gensim.models.phrases.Phrases(trigrams[bigrams[sentences]], common_terms=common_terms)
-    quadgrams.save("quadgrams_model")
-"""
+
+def load_phrase_models(bigram_model_file: str, trigram_model_file: str) -> Tuple[Phraser, Phraser]:
+    bigram_model = gensim.models.phrases.Phraser.load(bigram_model_file)
+    trigram_model = gensim.models.phrases.Phraser.load(trigram_model_file)
+    return bigram_model, trigram_model
+
+
+def analyze_file(input_text_file: str, output_text_file: str, bigram_model_file: str, trigram_model_file: str) -> None:
+    print("Reading raw text from {}".format(input_text_file))
+    print("Writing phrases to {}".format(output_text_file))
+    bigram_model, trigram_model = load_phrase_models(bigram_model_file, trigram_model_file)
+    num_lines_written = 0
+    with open(output_text_file, "w") as output:
+        with open(input_text_file, "r") as input:
+            for line in input:
+                if num_lines_written % 10000 == 0:
+                    print("{} lines written".format(num_lines_written))
+                output.write(" ".join(list(trigram_model[bigram_model[line.rstrip().split()]])) + "\n")
+                num_lines_written += 1
+
 
 
 if __name__ == "__main__":
@@ -120,13 +137,27 @@ if __name__ == "__main__":
     db_url = "mongodb://localhost:27017"
     db_name = "texts"
     db_collection_name = "diffbot"
-    db_output_file = "metacurate-out.txt"
 
     webhose_zip_directory = "/Users/fredriko/data/webhose-corpora/unzipped"
-    webhose_output_file = "webhose-out.txt"
 
+    data_directory = "/Users/fredriko/Dropbox/data/wordspaces/raw/"
+    raw_db_text = data_directory + "metacurate-out.txt"
+    raw_webhose_text = data_directory + "webhose-out.txt"
+    phrases_db_text = data_directory + "metacurate-phrases.txt"
+    phrases_webhose_text = data_directory + "webhose-phrases.txt"
+
+    bigram_model_file = "bigram_phrases.model"
+    trigram_model_file = "trigram_phrases.model"
+
+    """
     db_processor = DbProcessor(db_url, db_name, db_collection_name)
     db_processor.process(db_output_file, num_docs=10000)
 
     webhose_processor = WebhoseZipFileProcessor()
     webhose_processor.process(webhose_zip_directory, webhose_output_file)
+
+    # 2018-06-30 22:32:18,683: INFO: collected 38031498 word types from a corpus of 440206564 words (unigram + bigrams) and 20817495 sentences
+    create_phrases(data_directory, bigram_model_file, trigram_model_file)
+    """
+    analyze_file(raw_db_text, phrases_db_text, bigram_model_file, trigram_model_file)
+    analyze_file(raw_webhose_text, phrases_webhose_text, bigram_model_file, trigram_model_file)
