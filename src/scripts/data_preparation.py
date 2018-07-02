@@ -8,6 +8,7 @@ import re
 
 import gensim
 import pymongo as pymongo
+import src.scripts.config as config
 from gensim.models.phrases import Phraser
 from pymongo.collection import Collection
 from segtok.segmenter import split_multi
@@ -32,7 +33,6 @@ class WebhoseZipFileProcessor(object):
         print("Listed {} files in directory {}".format(len(file_names), directory_name))
         for file_name in file_names:
             print("File: {}".format(file_name))
-            # [list(gen()) for gen in generator_of_generator_functions]
         for file_name in file_names:
             WebhoseZipFileProcessor._read_webhose_zip_file(file_name, output_file)
 
@@ -130,34 +130,46 @@ def analyze_file(input_text_file: str, output_text_file: str, bigram_model_file:
                 num_lines_written += 1
 
 
-
 if __name__ == "__main__":
+    """
+    The following sequence of method calls reads a MongoDb collection containing texts extracted from approx. 6000
+    articles available in the MetaCurate database, as well as English corpora from webhose.io. The texts are segmented
+    into sentences and tokenized, then used for training Gensim Phrasers, identifying collocations, for bigrams and
+    tri- and quadgrams. The Phrasers are save disk as well as used to process and print a new version of the initial
+    raw text. 
+    """
     logging.basicConfig(format="%(asctime)s: %(levelname)s: %(message)s", level=logging.INFO)
+    base_directory = "/Users/fredriko/Dropbox/data/wordspaces/"
 
+    # Access to the local MongoDb containing MetaCurate texts.
     db_url = "mongodb://localhost:27017"
     db_name = "texts"
     db_collection_name = "diffbot"
 
-    webhose_zip_directory = "/Users/fredriko/data/webhose-corpora/unzipped"
+    # The directory in which the first level of unzipped webhose.io corpora are available. The corpora are retrieved
+    # from https://webhose.io/datasets/, e.g., "English news articles", and "Technology news articles".
+    webhose_zip_directory = "/Users/fredriko/Dropbox/data/wordspaces/zip/webhose-unzipped"
 
-    data_directory = "/Users/fredriko/Dropbox/data/wordspaces/raw/"
-    raw_db_text = data_directory + "metacurate-out.txt"
-    raw_webhose_text = data_directory + "webhose-out.txt"
-    phrases_db_text = data_directory + "metacurate-phrases.txt"
-    phrases_webhose_text = data_directory + "webhose-phrases.txt"
+    # Specification of where to put extracted and processed texts.
+    raw_db_text = config.RAW_DATA_DIRECTORY + "metacurate-out.txt"
+    raw_webhose_text = config.RAW_DATA_DIRECTORY + "webhose-out.txt"
 
-    bigram_model_file = "bigram_phrases.model"
-    trigram_model_file = "trigram_phrases.model"
+    # Specification of where to put the phrase data
+    phrases_db_text = config.PHRASE_DATA_DIRECTORY + "metacurate-phrases.txt"
+    phrases_webhose_text = config.PHRASE_DATA_DIRECTORY + "webhose-phrases.txt"
 
-    """
+    # Specification of where to store Phraser models
+    bigram_model_file = config.PHRASE_MODELS_DIRECTORY + "bigram_phrases.model"
+    trigram_model_file = config.PHRASE_MODELS_DIRECTORY + "trigram_phrases.model"
+
     db_processor = DbProcessor(db_url, db_name, db_collection_name)
-    db_processor.process(db_output_file, num_docs=10000)
+    db_processor.process(raw_db_text, num_docs=10000)
 
     webhose_processor = WebhoseZipFileProcessor()
-    webhose_processor.process(webhose_zip_directory, webhose_output_file)
+    webhose_processor.process(config.WEBHOSE_ZIP_DIRECTORY, raw_webhose_text)
 
     # 2018-06-30 22:32:18,683: INFO: collected 38031498 word types from a corpus of 440206564 words (unigram + bigrams) and 20817495 sentences
-    create_phrases(data_directory, bigram_model_file, trigram_model_file)
-    """
+    create_phrases(config.RAW_DATA_DIRECTORY, bigram_model_file, trigram_model_file)
+    
     analyze_file(raw_db_text, phrases_db_text, bigram_model_file, trigram_model_file)
     analyze_file(raw_webhose_text, phrases_webhose_text, bigram_model_file, trigram_model_file)

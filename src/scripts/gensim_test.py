@@ -2,35 +2,17 @@ import logging
 
 import gensim
 
-def load_and_test():
-    bigrams = gensim.models.phrases.Phrases.load("bigrams_model")
-    trigrams = gensim.models.phrases.Phrases.load("trigrams_model")
-    quadgrams = gensim.models.phrases.Phrases.load("quadgrams_model")
-    db_host = "mongodb://localhost:27017"
-    db_name = "texts"
-    db_collection_name = "diffbot"
-    sentences = read_db(db_host, db_name, db_collection_name, num_docs=3)
-    for sentence in list(quadgrams[trigrams[bigrams[sentences]]]):
-        print(sentence)
-
-
-def train():
-    db_host = "mongodb://localhost:27017"
-    db_name = "texts"
-    db_collection_name = "diffbot"
-
-    bigrams = gensim.models.phrases.Phrases.load("bigrams_model")
-    trigrams = gensim.models.phrases.Phrases.load("trigrams_model")
-    quadgrams = gensim.models.phrases.Phrases.load("quadgrams_model")
-
-    sentences = read_db(db_host, db_name, db_collection_name)
-    n_gram_sentences = list(quadgrams[trigrams[bigrams[sentences]]])
+def train(input_directory: str) -> None:
+    sentences = gensim.models.word2vec.PathLineSentences(input_directory)
     print("Setting up mopdel")
-    model = gensim.models.Word2Vec(n_gram_sentences, size=150, window=10, min_count=2, workers=10)
+    #model = gensim.models.Word2Vec(sentences, sg=1, size=150, window=10, min_count=4, workers=10)
+
+    model = gensim.models.FastText(sentences, sg=0, size=150, window=10, min_count=4, workers=10)
+    model.build_vocab(sentences)
     print("Training model")
-    model.train(n_gram_sentences, total_examples=len(n_gram_sentences), epochs=10)
+    model.train(sentences, total_examples=model.corpus_count, epochs=10)
     print("Saving model")
-    model.save("test_model_1")
+    model.save("fasttext-cbow.model")
 
 
 def print_result(model, word, top_n):
@@ -71,6 +53,5 @@ def test():
 
 if __name__ == "__main__":
     logging.basicConfig(format="%(asctime)s: %(levelname)s: %(message)s", level=logging.INFO)
-    load_and_test()
-    train()
+    train("/Users/fredriko/Dropbox/data/wordspaces/phrases")
     test()
