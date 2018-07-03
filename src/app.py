@@ -1,13 +1,22 @@
 import gensim
+import platform
 from flask import Flask, request, render_template
 
 from src.scripts import config
 
 app = Flask(__name__)
 
+model_file_name = "word2vec-metacurate-cbow-1.model"
 
-#MODEL = gensim.models.Word2Vec.load(config.WORDSPACE_MODELS_DIRECTORY + "word2vec-metacurate-cbow.model")
-MODEL = gensim.models.Word2Vec.load("/app/src/fasttext-metacurate-cbow.model")
+if platform.system() == "Darwin":
+    # I'm on a Mac.
+    model_path = config.WORDSPACE_MODELS_DIRECTORY + model_file_name
+else:
+    # Here's where heroku looks for the model.
+    model_path = "/app/models/" + model_file_name
+
+MODEL = gensim.models.Word2Vec.load(model_path)
+
 
 @app.route("/")
 def index():

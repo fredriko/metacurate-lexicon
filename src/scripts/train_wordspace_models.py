@@ -18,10 +18,10 @@ def train_fasttext_model(input: str, output_directory: str, model_name: str) -> 
         sentences = gensim.models.word2vec.LineSentence(input)
 
     #model = gensim.models.FastText(sentences, sg=0, size=150, window=10, min_count=4, workers=10, iter=4)
-    model = gensim.models.FastText(workers=10, window=10, min_count=10)
+    model = gensim.models.FastText(workers=10, window=10, min_count=20, size=100)
     model.build_vocab(sentences)
     #model.train(sentences, total_examples=model.corpus_count, epochs=model.iter)
-    model.train(sentences, total_examples=model.corpus_count, epochs=10)
+    model.train(sentences, total_examples=model.corpus_count, epochs=20)
     model.save(output_directory + model_name)
 
 
@@ -36,7 +36,7 @@ def train_word2vec_model(input: str, output_directory: str, model_name: str) -> 
     else:
         sentences = gensim.models.word2vec.LineSentence(input)
 
-    model = gensim.models.Word2Vec(sentences, sg=0, size=150, window=10, min_count=1, workers=10)
+    model = gensim.models.Word2Vec(sentences, sg=0, size=200, window=10, min_count=10, workers=10)
     model.train(sentences, total_examples=model.corpus_count, epochs=10)
     model.save(output_directory + model_name)
 
@@ -75,7 +75,7 @@ def ocular_inspection(model_file: str, top_n: int = 10) -> None:
 
 if __name__ == "__main__":
     logging.basicConfig(format="%(asctime)s: %(levelname)s: %(message)s", level=logging.INFO)
-    train_fasttext_model(config.PHRASE_DATA_DIRECTORY + "metacurate-phrases.txt", config.WORDSPACE_MODELS_DIRECTORY, "fasttext-metacurate-cbow-1.model")
-    #train_word2vec_model(config.PHRASE_DATA_DIRECTORY + "metacurate-phrases.txt", config.WORDSPACE_MODELS_DIRECTORY, "word2vec-metacurate-cbow.model")
-    ocular_inspection(config.WORDSPACE_MODELS_DIRECTORY + "fasttext-metacurate-cbow-1.model")
-    #ocular_inspection(config.WORDSPACE_MODELS_DIRECTORY + "word2vec-metacurate-cbow.model")
+    #train_fasttext_model(config.PHRASE_DATA_DIRECTORY + "metacurate-phrases.txt", config.WORDSPACE_MODELS_DIRECTORY, "fasttext-metacurate-cbow-2.model")
+    train_word2vec_model(config.PHRASE_DATA_DIRECTORY + "metacurate-phrases.txt", config.WORDSPACE_MODELS_DIRECTORY, "word2vec-metacurate-cbow-1.model")
+    #ocular_inspection(config.WORDSPACE_MODELS_DIRECTORY + "fasttext-metacurate-cbow-2.model")
+    ocular_inspection(config.WORDSPACE_MODELS_DIRECTORY + "word2vec-metacurate-cbow-1.model")

@@ -1,11 +1,22 @@
 {% extends "base.jinja2" %}
 {% block content %}
-<h1>Wordspace</h1>
-<form action="{{ url_for('lookup') }}" method="post">
-<label for="term">Term to look-up</label>
-<input type="text" id="term" name="term">
-<button type="submit">Look-up</button>
-</form>
+    <!-- Begin page content -->
+    <main class="container" style="padding-top: 30px">
+    <div class="jumbotron" style="background-color: #fff;">
+      <h1 class="display-4">Technical term lexicon</h1>
+      <p class="lead">Lookup similar terms in a pre-trained vector space.
+
+      <form action="{{ url_for('lookup') }}" method="post">
+        <div class="form-row align-items-center">
+          <div class="col-auto">
+            <input type="text" class="form-control mb-2" id="term" name="term">
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-info mb-2" type="submit">Lookup a term in the lexicon</button>
+          </div>
+        </div>
+      </form>
+    </div>
 {% if error %}
   {{ error }}
 {% else %}
@@ -18,4 +29,5 @@
     </ol>
   {% endif %}
 {% endif %}
+
 {% endblock %}
