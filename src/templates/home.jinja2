@@ -1,0 +1,21 @@
+{% extends "base.jinja2" %}
+{% block content %}
+<h1>Wordspace</h1>
+<form action="{{ url_for('lookup') }}" method="post">
+<label for="term">Term to look-up</label>
+<input type="text" id="term" name="term">
+<button type="submit">Look-up</button>
+</form>
+{% if error %}
+  {{ error }}
+{% else %}
+  {% if data.lookup is not none %}
+    Terms similar to <i>{{ data.lookup }}</i>
+    <ol>
+    {% for similarity in data.similarities %}
+    <li>{{ similarity.term }}: {{ similarity.score }}</li>
+    {% endfor %}
+    </ol>
+  {% endif %}
+{% endif %}
+{% endblock %}
