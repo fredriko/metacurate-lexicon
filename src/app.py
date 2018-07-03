@@ -15,6 +15,7 @@ else:
     # Here's where heroku looks for the model.
     model_path = "/app/models/" + model_file_name
 
+#
 MODEL = gensim.models.Word2Vec.load(model_path)
 
 

@@ -1,4 +1,4 @@
-BASE_DIRECTORY = "/Users/fredriko/Dropbox/data/wordspaces/"
+BASE_DIRECTORY = "/Users/fredriko/Dropbox/data/metacurate-lexicon/"
 WEBHOSE_ZIP_DIRECTORY = BASE_DIRECTORY + "zip/webhose-unzipped/"
 RAW_DATA_DIRECTORY = BASE_DIRECTORY + "text/raw-text"
 PHRASE_DATA_DIRECTORY = BASE_DIRECTORY + "text/phrase-text/"

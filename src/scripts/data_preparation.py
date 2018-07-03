@@ -139,7 +139,7 @@ if __name__ == "__main__":
     raw text. 
     """
     logging.basicConfig(format="%(asctime)s: %(levelname)s: %(message)s", level=logging.INFO)
-    base_directory = "/Users/fredriko/Dropbox/data/wordspaces/"
+    base_directory = "/Users/fredriko/Dropbox/data/metacurate-lexicon/"
 
     # Access to the local MongoDb containing MetaCurate texts.
     db_url = "mongodb://localhost:27017"
@@ -148,7 +148,7 @@ if __name__ == "__main__":
 
     # The directory in which the first level of unzipped webhose.io corpora are available. The corpora are retrieved
     # from https://webhose.io/datasets/, e.g., "English news articles", and "Technology news articles".
-    webhose_zip_directory = "/Users/fredriko/Dropbox/data/wordspaces/zip/webhose-unzipped"
+    webhose_zip_directory = "/Users/fredriko/Dropbox/data/metacurate-lexicon/zip/webhose-unzipped"
 
     # Specification of where to put extracted and processed texts.
     raw_db_text = config.RAW_DATA_DIRECTORY + "metacurate-out.txt"
