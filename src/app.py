@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 
 #MODEL = gensim.models.Word2Vec.load(config.WORDSPACE_MODELS_DIRECTORY + "fasttext-metacurate-cbow.model")
-MODEL = gensim.models.Word2Vec.load("fasttext-metacurate-cbow.model")
+MODEL = gensim.models.Word2Vec.load("/app/src/fasttext-metacurate-cbow.model")
 
 @app.route("/")
 def index():
