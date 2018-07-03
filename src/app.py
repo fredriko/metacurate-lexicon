@@ -9,7 +9,7 @@ MODEL = gensim.models.Word2Vec.load("fasttext-metacurate-cbow.model")
 
 @app.route("/")
 def index():
-    return render_template("home.jinja2")
+    return render_template("home.jinja2", data={"lookup": None, "similarities": []})
 
 
 @app.route("/lookup", methods=["GET", "POST"])
