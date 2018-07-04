@@ -19,12 +19,7 @@ else:
 MODEL = gensim.models.Word2Vec.load(model_path)
 
 
-@app.route("/")
-def index():
-    return render_template("home.jinja2", data={"lookup": None, "similarities": []})
-
-
-@app.route("/lookup", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def lookup():
     result = []
     similarities = []
@@ -37,12 +32,12 @@ def lookup():
             try:
                 similarities = MODEL.wv.most_similar(positive=term.replace(" ", "_"), topn=10)
             except KeyError:
-                error = "The term {} is not in the vocabulary of the model.".format(term)
+                error = {"term": term, "message": "The term is not in the lexicon"}
             for similarity in similarities:
                 text = str(similarity[0]).replace("_", " ")
-                score = str(similarity[1])
+                score = str(round(similarity[1], 2))
                 result.append({"term": text, "score": score})
         else:
-            error = "No term specified!"
+            error = {"term": None, "message": "No term specified!"}
     return render_template("home.jinja2", data={"lookup": term, "similarities": result}, error=error)
 
