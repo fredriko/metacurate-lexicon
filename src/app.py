@@ -50,4 +50,4 @@ def lookup():
     return render_template("home.jinja2", data={"lookup": term, "similarities": result}, error=error)
 
 
-app.register_blueprint(api_blueprint, url_prefix="/api/v1")
+app.register_blueprint(api_blueprint)
