@@ -158,7 +158,7 @@ if __name__ == "__main__":
     phrases_db_text = config.PHRASE_DATA_DIRECTORY + "metacurate-phrases.txt"
     phrases_webhose_text = config.PHRASE_DATA_DIRECTORY + "webhose-phrases.txt"
 
-    # Specification of where to store Phraser models
+    # Specification of where to store Phraser gensim-models
     bigram_model_file = config.PHRASE_MODELS_DIRECTORY + "bigram_phrases.model"
     trigram_model_file = config.PHRASE_MODELS_DIRECTORY + "trigram_phrases.model"
 

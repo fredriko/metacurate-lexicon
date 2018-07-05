@@ -9,13 +9,13 @@ app = Flask(__name__)
 
 
 def load_model():
-    model_file_name = "word2vec-metacurate-cbow-1.model"
+    model_file_name = "word2vec-metacurate-cbow-5M-100-w10-min20-split.model"
     if platform.system() == "Darwin":
         # I'm on a Mac.
         model_path = config.WORDSPACE_MODELS_DIRECTORY + model_file_name
     else:
         # Here's where heroku looks for the model.
-        model_path = "/app/models/" + model_file_name
+        model_path = "/app/gensim-models/" + model_file_name
     return gensim.models.Word2Vec.load(model_path)
 
 
