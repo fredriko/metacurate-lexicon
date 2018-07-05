@@ -1,22 +1,30 @@
 import gensim
 import platform
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, g
 
 from src.scripts import config
+from src.models.api.views import api_blueprint
 
 app = Flask(__name__)
 
-model_file_name = "word2vec-metacurate-cbow-1.model"
 
-if platform.system() == "Darwin":
-    # I'm on a Mac.
-    model_path = config.WORDSPACE_MODELS_DIRECTORY + model_file_name
-else:
-    # Here's where heroku looks for the model.
-    model_path = "/app/models/" + model_file_name
+def load_model():
+    model_file_name = "word2vec-metacurate-cbow-1.model"
+    if platform.system() == "Darwin":
+        # I'm on a Mac.
+        model_path = config.WORDSPACE_MODELS_DIRECTORY + model_file_name
+    else:
+        # Here's where heroku looks for the model.
+        model_path = "/app/models/" + model_file_name
+    return gensim.models.Word2Vec.load(model_path)
 
-#
-MODEL = gensim.models.Word2Vec.load(model_path)
+
+MODEL = load_model()
+
+
+@app.before_request
+def before_request():
+    g.metacurate_model = MODEL
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -30,7 +38,7 @@ def lookup():
         term = term.lower().strip()
         if len(term) > 0:
             try:
-                similarities = MODEL.wv.most_similar(positive=term.replace(" ", "_"), topn=10)
+                similarities = g.metacurate_model.wv.most_similar(positive=term.replace(" ", "_"), topn=10)
             except KeyError:
                 error = {"term": term, "message": "The term is not in the lexicon"}
             for similarity in similarities:
@@ -41,3 +49,5 @@ def lookup():
             error = {"term": None, "message": "No term specified!"}
     return render_template("home.jinja2", data={"lookup": term, "similarities": result}, error=error)
 
+
+app.register_blueprint(api_blueprint, url_prefix="/api/v1")
