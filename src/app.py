@@ -50,4 +50,9 @@ def lookup():
     return render_template("home.jinja2", data={"lookup": term, "similarities": result}, error=error)
 
 
+@app.route("/about")
+def about():
+    return render_template("about.jinja2")
+
+
 app.register_blueprint(api_blueprint)
