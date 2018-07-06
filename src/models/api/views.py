@@ -41,7 +41,7 @@ class LookUp(Resource):
             term = term.lower().strip()
             if len(term) > 0:
                 try:
-                    similarities = g.metacurate_model.wv.most_similar(positive=term.replace(" ", "_"), topn=num)
+                    similarities = g.metacurate_vectors.most_similar(positive=term.replace(" ", "_"), topn=num)
                 except KeyError:
                     api.abort(404, "The term {} is not available in the lexicon".format(term))
                 for similarity in similarities:

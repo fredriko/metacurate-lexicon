@@ -21,6 +21,9 @@ def train_fasttext_model(input: str, output_directory: str, model_name: str) -> 
     model.build_vocab(sentences)
     model.train(sentences, total_examples=model.corpus_count, epochs=10)
     model.save(output_directory + model_name)
+    # We want the vectors only to reduce memory footprint: this is the file(s) that the oneline lexicon should use.
+    vectors = model.wv
+    vectors.save(output_directory + model_name + ".vectors-only")
 
 
 def train_word2vec_model(input: str, output_directory: str, model_name: str) -> None:
