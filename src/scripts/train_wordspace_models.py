@@ -37,6 +37,9 @@ def train_word2vec_model(input: str, output_directory: str, model_name: str) -> 
     model = gensim.models.Word2Vec(sentences, sg=0, size=100, window=10, min_count=20, workers=10)
     model.train(sentences, total_examples=model.corpus_count, epochs=10)
     model.save(output_directory + model_name)
+    # We want the vectors only to reduce memory footprint: this is the file(s) that the oneline lexicon should use.
+    vectors = model.wv
+    vectors.save(output_directory + model_name + ".vectors-only")
 
 
 def print_result(model: Union[gensim.models.FastText, gensim.models.Word2Vec], word: str, top_n: int) -> None:
