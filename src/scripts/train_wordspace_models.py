@@ -81,6 +81,6 @@ def ocular_inspection(model_file: str, top_n: int = 10) -> None:
 if __name__ == "__main__":
     logging.basicConfig(format="%(asctime)s: %(levelname)s: %(message)s", level=logging.INFO)
     #train_fasttext_model(config.PHRASE_DATA_DIRECTORY + "metacurate-phrases.txt", config.WORDSPACE_MODELS_DIRECTORY, "fasttext-metacurate-cbow-2.model")
-    train_word2vec_model(config.SPLITS_DATA_DIRECTORY_10M, config.WORDSPACE_MODELS_DIRECTORY, "word2vec-metacurate-cbow-10M-100-w10-min20-split.model")
+    train_word2vec_model(config.SPLITS_DATA_DIRECTORY_10M, config.WORDSPACE_MODELS_DIRECTORY, "word2vec-metacurate-cbow-20M-100-w10-min20-split.model")
     #ocular_inspection(config.WORDSPACE_MODELS_DIRECTORY + "fasttext-metacurate-cbow-2.model")
-    ocular_inspection(config.WORDSPACE_MODELS_DIRECTORY + "word2vec-metacurate-cbow-10M-100-w10-min20-split.model")
+    ocular_inspection(config.WORDSPACE_MODELS_DIRECTORY + "word2vec-metacurate-cbow-20M-100-w10-min20-split.model")
