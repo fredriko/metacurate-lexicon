@@ -58,6 +58,7 @@ def print_result(model: Union[gensim.models.FastText, gensim.models.Word2Vec], w
 
 def ocular_inspection(model_file: str, top_n: int = 10) -> None:
     model = gensim.models.Word2Vec.load(model_file)
+    print("Size of lexicon: {} terms".format(len(model.wv.vocab)))
     print_result(model, "artificial intelligence", top_n)
     print_result(model, "google", top_n)
     print_result(model, "language", top_n)
@@ -76,11 +77,10 @@ def ocular_inspection(model_file: str, top_n: int = 10) -> None:
     print_result(model, "one of the most popular", top_n)
     print_result(model, "excel files", top_n)
 
-
+# 2018-07-07 21:12:24,995: INFO: EPOCH - 10 : training on 195069967 raw words (151372237 effective words) took 213.2s, 710002 effective words/s
 if __name__ == "__main__":
     logging.basicConfig(format="%(asctime)s: %(levelname)s: %(message)s", level=logging.INFO)
     #train_fasttext_model(config.PHRASE_DATA_DIRECTORY + "metacurate-phrases.txt", config.WORDSPACE_MODELS_DIRECTORY, "fasttext-metacurate-cbow-2.model")
-    #train_word2vec_model(config.PHRASE_DATA_DIRECTORY + "metacurate-phrases.txt", config.WORDSPACE_MODELS_DIRECTORY, "word2vec-metacurate-cbow-1.model")
     train_word2vec_model(config.SPLITS_DATA_DIRECTORY_10M, config.WORDSPACE_MODELS_DIRECTORY, "word2vec-metacurate-cbow-10M-100-w10-min20-split.model")
     #ocular_inspection(config.WORDSPACE_MODELS_DIRECTORY + "fasttext-metacurate-cbow-2.model")
     ocular_inspection(config.WORDSPACE_MODELS_DIRECTORY + "word2vec-metacurate-cbow-10M-100-w10-min20-split.model")

@@ -6,8 +6,6 @@ api_blueprint = Blueprint("api", __name__, url_prefix="/api/v1")
 api = Api(api_blueprint, version="1.0", title="Metacurate text processing API",
           description="API for accessing lexical knowledge, and text normalization.")
 
-ns = api.namespace("lookup", description="Look-up semantically similar terms.")
-
 resource_fields = api.model('lookup response', {
     "term": fields.String(description="The term semantically similar to the one looked-up in the lexicon."),
     "similarity": fields.Float(description="The cosine similarity score of the input term and one to which this "
@@ -16,8 +14,8 @@ resource_fields = api.model('lookup response', {
 })
 
 
-@ns.route("/<string:term>", defaults={"num": 10})
-@ns.route("/<string:term>/<int:num>")
+@api.route("/lookup/<string:term>", defaults={"num": 10})
+@api.route("/lookup/<string:term>/<int:num>")
 @api.doc(responses={200: "The term to look-up is available in the lexicon",
                     400: "No term to look-up is specified",
                     404: "Term not in lexicon"},
@@ -25,7 +23,7 @@ resource_fields = api.model('lookup response', {
                  "num": "The number of semantically similar terms to retrieve (optional)."})
 class LookUp(Resource):
 
-    @ns.marshal_with(resource_fields, as_list=True)
+    @api.marshal_with(resource_fields, as_list=True)
     def get(self, term, num):
         min = 1
         max = 50
@@ -53,3 +51,12 @@ class LookUp(Resource):
         else:
             api.abort(400, "No term to look-up is specified")
         return result
+
+
+"""
+@api.route("/tokenize/")
+class Tokenize(Resource):
+
+    def post(self):
+        pass
+"""
