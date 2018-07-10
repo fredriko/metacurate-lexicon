@@ -3,7 +3,7 @@
     <div class="jumbotron jumbotron-fluid" style="background-color: #fff; margin-bottom: 0;">
       <h1 class="display-4">Term similarity lexicon</h1>
       <p class="lead">Look up semantically similar terms in the domain of machine learning, artificial intelligence, and data science.</p>
-      <form action="{{ url_for('lookup') }}" method="post">
+      <form action="{{ url_for('lookup') }}" method="get">
         <div class="form-row align-items-center">
           <div class="col-auto">
             <input type="text" class="form-control mb-2" id="term" name="term">
@@ -23,19 +23,20 @@
         {% endif %}
     </p>
 {% else %}
-  {% if data.lookup is not none %}
+  {% if data is not none and data.lookup is not none %}
 <table class="table table-striped table-hover table-borderless">
   <thead>
     <tr>
-      <th scope="col" class="lead">Terms similar to <i><b>{{ data.lookup }}</b></i></th>
+      <th scope="col" class="w-50 lead">Terms similar to <i><b>{{ data.lookup }}</b></i></th>
       <th scope="col" class="lead">Cosine similarity</th>
     </tr>
   </thead>
   <tbody>
     {% for similarity in data.similarities %}
     <tr>
-      <td>{{ similarity.term }}</td>
+      <td><a class="text-info" href="{{ url_for('lookup') }}?term={{ similarity.term }}">{{ similarity.term }}</td>
       <td>{{ similarity.score }}</td>
+    </tr>
     {% endfor %}
   </tbody>
 </table>

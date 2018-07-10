@@ -27,14 +27,13 @@ def before_request():
     g.metacurate_vectors = MODEL
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/lookup/")
 def lookup():
+    term = request.args.get("term")
     result = []
     similarities = []
-    term = None
     error = None
-    if request.method == "POST":
-        term: str = request.form["term"]
+    if term is not None:
         term = term.lower().strip()
         if len(term) > 0:
             try:
@@ -48,6 +47,11 @@ def lookup():
         else:
             error = {"term": None, "message": "No term specified!"}
     return render_template("home.jinja2", data={"lookup": term, "similarities": result}, error=error)
+
+
+@app.route("/")
+def index():
+    return render_template("home.jinja2", data=None, error=None)
 
 
 @app.route("/about")
