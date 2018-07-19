@@ -1,14 +1,35 @@
 # Metacurate Lexicon
 ## tl;dr
 The metacurate lexicon, and the accompanying API, are the results of an investigation into the feasibility 
-to deploy a web service that uses a reasonably large vector model to heroku.
+to deploy a web service that uses a reasonably large set of word embeddings to platform-as-a-service Heroku.
 
-Upcoming features at [metacurate.io](https://metacurate.io) will require access to a lexicon of semantically similar multi-word 
+Upcoming features at [metacurate.io](https://metacurate.io) require access to a lexicon of semantically similar multi-word 
 terms. Since metacurate.io is hosted on [heroku](https://www.heroku.com/), 
 I wanted to find out whether the required semantic lexicon functionality can be deployed to heroku too,
 without violating their application size constraints.
 
 The answer is *yes*.
+
+
+## How to run the web service locally
+
+### Pre-requisites and installation
+
+You will need:
+
+* Python 3.6
+* virutalenv 
+
+Optional: If you plan on using retrieve and use the data from metacurate.io, you will also 
+need to have a MongoDb instance running (see section *The data* below). 
+
+* Create a virtual environment, let's call it *metacurate-lexicon*
+* *pip install -r requirements.txt*
+
+
+### Running the service
+
+## How to deploy the web service to Heroku
 
 ## Background
 This is a python/Flask web application that exposes interfaces (a web GUI and a RESTful API) for looking up semantically 
@@ -42,7 +63,11 @@ English blog posts with at least 100 Facebook likes within 3 days of original po
 
 ### Making the data useful for training
 
+Download 
+
 ## Installation
+
+(If metacurate data: MongoDb required)
 
 ## Deploy to heroku
 
