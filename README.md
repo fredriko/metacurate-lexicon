@@ -4,7 +4,7 @@
 The metacurate lexicon, and the accompanying API, are the results of an investigation into the feasibility 
 to deploy a web service that uses a reasonably large set of word embeddings to platform-as-a-service Heroku.
 
-## verbose
+## Verbose
 
 The metacurate lexicon is available at 
 [https://metacurate-lexicon.herokuapp.com/](https://metacurate-lexicon.herokuapp.com/) 
@@ -22,6 +22,8 @@ Here's a screenshot of looking up the term *word embedding* in the lexicon:
 Here's a screenshot of the automatically generated API docmentation:
 
 ![the api documentation](src/static/metacurate-lexicon-api.png)
+
+## Why?
 
 Upcoming features at [metacurate.io](https://metacurate.io) require access to a lexicon of semantically similar 
 multi-word terms. Since metacurate.io is hosted on [heroku](https://www.heroku.com/), 
