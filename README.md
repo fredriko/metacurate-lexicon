@@ -34,13 +34,38 @@ The answer is *yes*.
 
 ## How to run the web service locally
 
-You will need:
 
-* Python 3.6
-* virutalenv 
+To install and run this program you need:
+
+* *Python 3.6* or higher to execute the program. [Download and install.](https://www.python.org/getit/)
+* *Git* to get local copy of this repository. [Download and install.](https://git-scm.com/downloads)
+
+I also suggest you use, e.g., [virtualenv](https://virtualenv.pypa.io/en/stable/installation/) to create a virtual environment in which you
+install the requirements of this program.
+
+Once the above requirements are in place, at a command line prompt, do the following:
+
+```
+$ git clone https://github.com/fredriko/metacurate-lexicon.git
+$ cd metacurate-lexicon
+```
+
+to clone this repository to your local machine, and 
+
+```sh
+$ virtualenv ~/venv/mcl
+$ source ~/venv/mcl/bin/activate
+```
+
+to set up and activate a virtual environment called `mcl`. To install the python
+dependencies of `metacurate-lexicon`, type:
+
+```
+$ pip install -r requirements.txt
+```
+
+You're done installing the `metacurate-lexicon`. Let's run the server.
 
 
-* Create a virtual environment, let's call it *metacurate-lexicon*
-* *pip install -r requirements.txt*
 
 ## How to deploy the web service to Heroku
