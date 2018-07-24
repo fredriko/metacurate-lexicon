@@ -84,3 +84,7 @@ After a little while, a message similar to the following should be printed to th
 
 The server is up and running! Point your browser to the address in the message and play around with it.
 
+## Todo
+
+* Instructions for how to deploy the service to heroku.
+* Write-up regarding data collection, cleaning, collocation extraction, and the training of word2vec/fasttext models.
