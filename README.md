@@ -34,7 +34,6 @@ The answer is *yes*.
 
 ## How to run the web service locally
 
-
 To install and run this program you need:
 
 * *Python 3.6* or higher to execute the program. [Download and install.](https://www.python.org/getit/)
@@ -64,8 +63,24 @@ dependencies of `metacurate-lexicon`, type:
 $ pip install -r requirements.txt
 ```
 
-You're done installing the `metacurate-lexicon`. Let's run the server.
+You're done installing the `metacurate-lexicon`. Let's run the server. Still in at the top level of the 
+directory to which you cloned the repository, type:
 
+```
+$ python -m src.run
+```
 
+After a little while, a message similar to the following should be printed to the screen:
 
-## How to deploy the web service to Heroku
+```
+ * Serving Flask app "src.app" (lazy loading)
+ * Environment: production
+   WARNING: Do not use the development server in a production environment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://127.0.0.1:4990/ (Press CTRL+C to quit)
+
+```
+
+The server is up and running! Point your browser to the address in the message and play around with it.
+
