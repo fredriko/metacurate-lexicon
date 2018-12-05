@@ -12,6 +12,7 @@ heroku_model_root = "/app/gensim-models/"
 
 def load_vectors():
     vectors_file_name = "word2vec-metacurate-cbow-5M-100-w10-min20-split.vectors"
+    print(f"Node:{platform.node()}")
     if platform.system() == "Darwin" or platform.node() == "vector":
         # I'm on a Mac or I'm on a magic machine.
         vectors_path = config.WORDSPACE_MODELS_DIRECTORY + vectors_file_name
@@ -24,7 +25,7 @@ def load_vectors():
 def load_phrasers():
     bigram_model_name = "bigram_phrases.model"
     trigram_model_name = "trigram_phrases.model"
-    if platform.system() == "Darwin":
+    if platform.system() == "Darwin" or platform.node() == "vector":
         bigram_path = config.PHRASE_MODELS_DIRECTORY + bigram_model_name
         trigram_path = config.PHRASE_MODELS_DIRECTORY + trigram_model_name
     else:
