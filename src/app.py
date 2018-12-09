@@ -12,7 +12,7 @@ heroku_model_root = "/app/gensim-models/"
 
 def load_vectors():
     vectors_file_name = "word2vec-metacurate-cbow-5M-100-w10-min20-split.vectors"
-    print(f"Node:{platform.node()}")
+
     if platform.system() == "Darwin" or platform.node() == "vector":
         # I'm on a Mac or I'm on a magic machine.
         vectors_path = config.WORDSPACE_MODELS_DIRECTORY + vectors_file_name
